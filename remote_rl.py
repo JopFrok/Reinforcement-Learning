@@ -31,7 +31,7 @@ args = parser.parse_args()
 # initialize wandb project
 run = wandb.init(project="sb3_pendulum_demo",sync_tensorboard=True)
 
-env = RoboEnv()
+env = RoboEnv(RenderMode=False)
 # add tensorboard logging to the model
 model = PPO('MlpPolicy', env, verbose=1, 
             learning_rate=args.learning_rate, 
@@ -54,11 +54,3 @@ for i in range(3):
     model.save(f"models/{run.id}/{timesteps*(i+1)}")
     
     #Test the trained model
-obs = env.reset()
-for i in range(1000):
-    action, _ = model.predict(obs,deterministic=True)
-    obs, reward, done, info = env.step(action)
-    # env.render()
-    time.sleep(0.025)
-    if done:
-        env.reset()
