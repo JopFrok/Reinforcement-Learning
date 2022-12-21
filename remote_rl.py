@@ -29,7 +29,7 @@ args = parser.parse_args()
 
 
 # initialize wandb project
-run = wandb.init(project="sb3_pendulum_demo",sync_tensorboard=True)
+run = wandb.init(project="Reinforment-Learning",sync_tensorboard=True)
 
 env = RoboEnv(RenderMode=False)
 # add tensorboard logging to the model
@@ -41,12 +41,12 @@ model = PPO('MlpPolicy', env, verbose=1,
             tensorboard_log=f"runs/{run.id}",)
 
 # create wandb callback
-wandb_callback = WandbCallback(model_save_freq=1000, model_save_path=f"models/{run.id}", verbose=2,)
+wandb_callback = WandbCallback(model_save_freq=100000, model_save_path=f"models/{run.id}", verbose=2,)
 
         
 # variable for how often to save the model
 timesteps = 100000
-for i in range(3):
+for i in range(30):
     # add the reset_num_timesteps=False argument to the learn function to prevent the model from resetting the timestep counter
     # add the tb_log_name argument to the learn function to log the tensorboard data to the correct folder
     model.learn(total_timesteps=timesteps, callback=wandb_callback, progress_bar=True, reset_num_timesteps=False,tb_log_name=f"runs/{run.id}")
